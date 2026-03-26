@@ -1,87 +1,272 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>roebi — Robert Halter</title>
+  <meta name="description" content="roebi (Robert Halter) — Swiss Open Source Developer. New Work with Skills · AI-augmented Engineering · Test Automation." />
+  <meta name="author" content="roebi, Robert Halter" />
+  <meta name="keywords" content="roebi, Robert Halter, open source, agent skills, new work with skills, agentskills.io, test automation, Switzerland, Python, AI tooling" />
 
-  <head>
-    
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JJYSKCKJ5J"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <!-- Open Graph -->
+  <meta property="og:title" content="roebi — Robert Halter" />
+  <meta property="og:description" content="Swiss Open Source Developer. New Work with Skills · AI-augmented Engineering." />
+  <meta property="og:url" content="https://roebi.github.io" />
+  <meta property="og:type" content="website" />
 
-  gtag('config', 'G-JJYSKCKJ5J');
-</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="roebi.github.io : Home of roebi at github.io">
+  <!-- React + Babel via CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: #0d1117; }
+    #root { height: 100%; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
 
-    <title>roebi.github.io</title>
-  </head>
+  <script type="text/babel">
+    const { useState, useEffect } = React;
 
-  <body>
+    const LINKS = [
+      {
+        label: "new-work-skills.dev",
+        href: "https://new-work-skills.dev",
+        desc: "The methodology & skill cards",
+        icon: "🌐",
+      },
+      {
+        label: "Blog",
+        href: "https://roebi.github.io/roebi-halter-in-blog",
+        desc: "What I'm learning & building",
+        icon: "📝",
+      },
+      {
+        label: "GitHub",
+        href: "https://github.com/roebi",
+        desc: "Open source skills & projects",
+        icon: "⚙️",
+      },
+    ];
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/roebi">View on GitHub</a>
+    const TAGLINE = "New Work with Skills · Swiss Open Source · AI-augmented Engineering";
 
-          <h1 id="project_title">roebi.github.io</h1>
-          <h2 id="project_tagline">Home of roebi at github.io</h2>
+    function TypingText({ text, speed = 40, delay = 0 }) {
+      const [displayed, setDisplayed] = useState("");
+      const [started, setStarted] = useState(false);
 
-        </header>
-    </div>
+      useEffect(() => {
+        const t = setTimeout(() => setStarted(true), delay);
+        return () => clearTimeout(t);
+      }, [delay]);
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h3>
-<a id="about-me" class="anchor" href="#about-me" aria-hidden="true"><span class="octicon octicon-link"></span></a>About me</h3>
+      useEffect(() => {
+        if (!started || displayed.length >= text.length) return;
+        const t = setTimeout(
+          () => setDisplayed(text.slice(0, displayed.length + 1)),
+          speed
+        );
+        return () => clearTimeout(t);
+      }, [started, displayed, text, speed]);
 
-<p>Product Owner Testautomation and Testarchitekt</p>
+      return (
+        <span>
+          {displayed}
+          {displayed.length < text.length && (
+            <span style={{
+              borderRight: "2px solid #c9a84c",
+              animation: "blink 1s step-end infinite",
+              marginLeft: "1px",
+            }}>&nbsp;</span>
+          )}
+        </span>
+      );
+    }
 
-<p>Love Java VM based Languages specially Scala</p>
+    function LinkCard({ href, label, desc, icon, delay }) {
+      const [visible, setVisible] = useState(false);
+      const [hovered, setHovered] = useState(false);
 
-<h3>
-<a id="lives-in" class="anchor" href="#lives-in" aria-hidden="true"><span class="octicon octicon-link"></span></a>Lives in</h3>
+      useEffect(() => {
+        const t = setTimeout(() => setVisible(true), delay);
+        return () => clearTimeout(t);
+      }, [delay]);
 
-<p>Switzerland</p>
+      return (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "16px",
+            padding: "14px 20px",
+            background: hovered ? "rgba(201,168,76,0.08)" : "rgba(78,205,196,0.05)",
+            border: `1px solid ${hovered ? "rgba(201,168,76,0.5)" : "rgba(78,205,196,0.2)"}`,
+            borderRadius: "8px",
+            textDecoration: "none",
+            transition: "all 0.25s ease",
+            opacity: visible ? 1 : 0,
+            transform: visible
+              ? hovered ? "translateX(4px)" : "translateY(0)"
+              : "translateY(12px)",
+            cursor: "pointer",
+          }}
+        >
+          <span style={{ fontSize: "22px", minWidth: "28px", textAlign: "center" }}>
+            {icon}
+          </span>
+          <div>
+            <div style={{
+              color: "#c9a84c",
+              fontFamily: "'JetBrains Mono', monospace",
+              fontWeight: 700,
+              fontSize: "14px",
+            }}>
+              {label}
+            </div>
+            <div style={{ color: "#8b9ab0", fontSize: "12px", marginTop: "2px" }}>
+              {desc}
+            </div>
+          </div>
+          <span style={{ marginLeft: "auto", color: "#4ecdc4", opacity: 0.6, fontSize: "16px" }}>
+            →
+          </span>
+        </a>
+      );
+    }
 
-<h3>
-<a id="find-me-at-github" class="anchor" href="#find-me-at-github" aria-hidden="true"><span class="octicon octicon-link"></span></a>Find me at GitHub</h3>
+    function App() {
+      const [showTagline, setShowTagline] = useState(false);
+      const [showMethod, setShowMethod]   = useState(false);
+      const [showLinks, setShowLinks]     = useState(false);
 
-<p><a href="https://github.com/roebi" class="user-mention">@roebi</a></p>
+      useEffect(() => {
+        setTimeout(() => setShowTagline(true), 700);
+        setTimeout(() => setShowMethod(true),  2200);
+        setTimeout(() => setShowLinks(true),   2800);
+      }, []);
 
-<p><a href="https://roebi.github.io">https://roebi.github.io</a></p>
+      return (
+        <div style={{
+          minHeight: "100vh",
+          background: "#0d1117",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "32px 16px",
+          fontFamily: "system-ui, sans-serif",
+        }}>
+          <div style={{ maxWidth: "540px", width: "100%" }}>
 
-<h3>
-<a id="ps" class="anchor" href="#ps" aria-hidden="true"><span class="octicon octicon-link"></span></a>PS</h3>
+            {/* Prompt + name */}
+            <div style={{ display: "flex", alignItems: "baseline", gap: "10px", marginBottom: "4px" }}>
+              <span style={{ color: "#4ecdc4", fontFamily: "'JetBrains Mono', monospace", fontSize: "22px" }}>
+                ❯
+              </span>
+              <span style={{
+                color: "#c9a84c",
+                fontFamily: "'JetBrains Mono', monospace",
+                fontWeight: 700,
+                fontSize: "clamp(30px, 8vw, 48px)",
+                letterSpacing: "-1px",
+                lineHeight: 1,
+              }}>
+                <TypingText text="roebi" speed={110} delay={150} />
+              </span>
+            </div>
 
-<p>this site use google analytics</p>
-      </section>
-    </div>
+            {/* Tagline */}
+            <div style={{
+              marginLeft: "36px",
+              marginBottom: "28px",
+              color: "#4ecdc4",
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: "12px",
+              letterSpacing: "0.4px",
+              minHeight: "18px",
+              opacity: showTagline ? 1 : 0,
+              transition: "opacity 0.5s",
+            }}>
+              {showTagline && <TypingText text={TAGLINE} speed={20} delay={0} />}
+            </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-<!--
-              <script type="text/javascript">
-            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-          </script>
-          <script type="text/javascript">
-            try {
-              var pageTracker = _gat._getTracker("UA-62636602-1");
-            pageTracker._trackPageview();
-            } catch(err) {}
-          </script>
--->
+            {/* Method block */}
+            <div style={{
+              marginBottom: "24px",
+              padding: "14px 18px",
+              borderLeft: "3px solid #c9a84c",
+              background: "rgba(201,168,76,0.04)",
+              borderRadius: "0 6px 6px 0",
+              opacity: showMethod ? 1 : 0,
+              transform: showMethod ? "translateY(0)" : "translateY(8px)",
+              transition: "all 0.5s ease",
+            }}>
+              <div style={{ color: "#e6edf3", fontSize: "14px", lineHeight: 1.65 }}>
+                I combine years of engineering experience with the{" "}
+                <strong style={{ color: "#c9a84c" }}>New Work way</strong>{" "}
+                — AI agent skills that are versioned, portable, and actually ship.
+              </div>
+              <div style={{ marginTop: "8px" }}>
+                <a
+                  href="https://agentskills.io"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    color: "#4ecdc4",
+                    fontSize: "11px",
+                    fontFamily: "'JetBrains Mono', monospace",
+                    textDecoration: "none",
+                  }}
+                >
+                  agentskills.io specification ↗
+                </a>
+              </div>
+            </div>
 
-  </body>
+            {/* Link cards */}
+            <div style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "8px",
+              opacity: showLinks ? 1 : 0,
+              transition: "opacity 0.4s",
+            }}>
+              {LINKS.map((link, i) => (
+                <LinkCard key={link.href} {...link} delay={i * 160} />
+              ))}
+            </div>
+
+            {/* Footer */}
+            <div style={{
+              marginTop: "24px",
+              textAlign: "center",
+              color: "#3d4f66",
+              fontSize: "11px",
+              fontFamily: "'JetBrains Mono', monospace",
+              opacity: showLinks ? 1 : 0,
+              transition: "opacity 0.5s ease 0.5s",
+            }}>
+              🇨🇭 Robert Halter · roebi · Switzerland
+            </div>
+
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</body>
 </html>
